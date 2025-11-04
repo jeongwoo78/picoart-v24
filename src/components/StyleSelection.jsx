@@ -1,4 +1,4 @@
-// PicoArt v24 - StyleSelection (아이폰 스타일 - 심플 & 컴팩트)
+// PicoArt v24 - StyleSelection (아이폰 스타일 - 데이터 있는 것만 표시)
 import React, { useState, useMemo } from 'react';
 import { artStyles, styleCategories } from '../data/artStyles';
 
@@ -26,15 +26,24 @@ const StyleSelection = ({ photo, onSelect }) => {
   const groupedStyles = useMemo(() => {
     const groups = {};
     Object.entries(styleCategories).forEach(([key, category]) => {
-      groups[key] = {
-        category,
-        styles: artStyles.filter(style => style.category === key)
-      };
+      const styles = artStyles.filter(style => style.category === key);
+      // 데이터가 있는 것만 포함
+      if (styles.length > 0) {
+        groups[key] = {
+          category,
+          styles
+        };
+      }
     });
     return groups;
   }, []);
 
-  const currentSubcategories = mainCategories[mainCategory].subcategories;
+  // 데이터가 있는 카테고리만 필터링
+  const availableSubcategories = useMemo(() => {
+    return mainCategories[mainCategory].subcategories.filter(
+      key => groupedStyles[key] && groupedStyles[key].styles.length > 0
+    );
+  }, [mainCategory, groupedStyles]);
 
   const handleMainCategoryChange = (newMainCategory) => {
     setMainCategory(newMainCategory);
@@ -79,9 +88,9 @@ const StyleSelection = ({ photo, onSelect }) => {
 
         {/* 스타일 카드 */}
         <div className="styles-container">
-          {mainCategory === 'movements' && (
+          {mainCategory === 'movements' && availableSubcategories.length > 0 && (
             <div className="styles-grid">
-              {currentSubcategories.map(categoryKey => (
+              {availableSubcategories.map(categoryKey => (
                 <button
                   key={categoryKey}
                   className="style-card"
@@ -291,14 +300,6 @@ const StyleSelection = ({ photo, onSelect }) => {
 
           .card-era {
             color: #98989d;
-          }
-        }
-
-        /* 아이폰 노치 대응 */
-        @supports (padding: max(0px)) {
-          .selection-container {
-            padding-top: max(16px, env(safe-area-inset-top));
-            padding-bottom: max(16px, env(safe-area-inset-bottom));
           }
         }
 
