@@ -1,6 +1,5 @@
-// PicoArt v22 - 하이브리드 모델 설정
-// FLUX: 고품질 (화가별 차이 중요)
-// SDXL: 표준 (일반 화풍)
+// PicoArt v24 - FLUX 모델 설정
+// FLUX: 고품질 AI 변환
 
 export const MODEL_CONFIG = {
   FLUX: {
@@ -9,13 +8,6 @@ export const MODEL_CONFIG = {
     cost: 0.014,
     time: 54,
     label: "FLUX (최고 품질)"
-  },
-  SDXL: {
-    model: "stability-ai/sdxl",
-    version: "39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
-    cost: 0.003,
-    time: 30,
-    label: "SDXL (표준)"
   }
 };
 

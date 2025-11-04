@@ -25,7 +25,7 @@ export const artStyles = [
   {
     id: 'greek-roman',
     category: 'ancient',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 1,
     name: '그리스·로마',
     nameEn: 'Greek & Roman Art',
@@ -52,7 +52,7 @@ export const artStyles = [
   {
     id: 'byzantine-islamic',
     category: 'byzantineIslamic',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 2,
     name: '비잔틴·이슬람',
     nameEn: 'Byzantine & Islamic Art',
@@ -83,12 +83,124 @@ export const artStyles = [
     icon: '🕌'
   },
 
-  // ==================== 10. 거장 (거장 탭 전용) - 연대기순 ====================
+  // ==================== 3. 르네상스 ====================
+  {
+    id: 'renaissance',
+    category: 'renaissance',
+    model: 'FLUX',
+    order: 3,
+    name: '르네상스',
+    nameEn: 'Renaissance',
+    description: '고전의 부활과 인본주의',
+    prompt: 'Renaissance painting style, soft sfumato technique, harmonious balanced composition, warm golden Renaissance colors, detailed naturalistic rendering, gentle serene expressions, classical perspective, painted in Renaissance masterpiece quality',
+    color: '#CD853F',
+    icon: '🎭'
+  },
+
+  // ==================== 4. 바로크 ====================
+  {
+    id: 'baroque',
+    category: 'baroque',
+    model: 'FLUX',
+    order: 4,
+    name: '바로크',
+    nameEn: 'Baroque',
+    description: '극적인 명암과 화려함',
+    prompt: 'Baroque painting style, dramatic chiaroscuro lighting, rich deep colors, dynamic diagonal composition, theatrical emotional atmosphere, strong contrast between light and shadow, painted in Baroque masterpiece quality',
+    color: '#8B4513',
+    icon: '🌟'
+  },
+
+  // ==================== 5. 로코코 ====================
+  {
+    id: 'rococo',
+    category: 'rococo',
+    model: 'FLUX',
+    order: 5,
+    name: '로코코',
+    nameEn: 'Rococo',
+    description: '우아하고 장식적인 아름다움',
+    prompt: 'Rococo painting style, light pastel colors, playful ornate decoration, soft delicate brushwork, romantic elegant atmosphere, graceful curved lines, whimsical charm, painted in Rococo masterpiece quality',
+    color: '#FFB6C1',
+    icon: '💐'
+  },
+
+  // ==================== 6. 낭만주의 ====================
+  {
+    id: 'romanticism',
+    category: 'romanticism',
+    model: 'FLUX',
+    order: 6,
+    name: '낭만주의',
+    nameEn: 'Romanticism',
+    description: '감정과 자연의 숭고함',
+    prompt: 'Romantic painting style, dramatic emotional intensity, sublime natural beauty, vivid expressive colors, dynamic turbulent composition, passionate atmosphere, painted in Romantic masterpiece quality',
+    color: '#DC143C',
+    icon: '🌊'
+  },
+
+  // ==================== 7. 인상주의 ====================
+  {
+    id: 'impressionism',
+    category: 'impressionism',
+    model: 'FLUX',
+    order: 7,
+    name: '인상주의',
+    nameEn: 'Impressionism',
+    description: '빛과 색의 순간 포착',
+    prompt: 'Impressionist painting style, visible short brushstrokes, pure unmixed colors, emphasis on natural light effects, outdoor plein-air atmosphere, capturing fleeting moments, painted in Impressionist masterpiece quality',
+    color: '#87CEEB',
+    icon: '🌅'
+  },
+
+  // ==================== 8. 후기인상주의 ====================
+  {
+    id: 'post-impressionism',
+    category: 'postImpressionism',
+    model: 'FLUX',
+    order: 8,
+    name: '후기인상주의',
+    nameEn: 'Post-Impressionism',
+    description: '개성적 표현의 시작',
+    prompt: 'Post-Impressionist painting style, bold expressive colors, geometric structured forms, emotional symbolic content, innovative personal vision, painted in Post-Impressionist masterpiece quality',
+    color: '#FF6347',
+    icon: '🎨'
+  },
+
+  // ==================== 9. 야수파 ====================
+  {
+    id: 'fauvism',
+    category: 'fauvism',
+    model: 'FLUX',
+    order: 9,
+    name: '야수파',
+    nameEn: 'Fauvism',
+    description: '강렬한 원색의 해방',
+    prompt: 'Fauvist painting style, wild bold colors liberated from reality, simplified forms, expressive pure hues, decorative flat patterns, joyful energetic vitality, painted in Fauvism masterpiece quality',
+    color: '#FF4500',
+    icon: '🦁'
+  },
+
+  // ==================== 10. 표현주의 ====================
+  {
+    id: 'expressionism',
+    category: 'expressionism',
+    model: 'FLUX',
+    order: 10,
+    name: '표현주의',
+    nameEn: 'Expressionism',
+    description: '내면의 감정 표출',
+    prompt: 'Expressionist painting style, distorted forms expressing inner emotion, intense dramatic colors, anxious turbulent mood, bold gestural brushwork, psychological depth, painted in Expressionist masterpiece quality',
+    color: '#8B008B',
+    icon: '😱'
+  },
+
+  // ==================== 11. 거장 (거장 탭 전용) - 연대기순 ====================
   
   {
     id: 'vangogh-master',
     category: 'masters',
-    model: 'SDXL',
+    model: 'FLUX',
     isMaster: true,
     order: 36,
     name: '빈센트 반 고흐',
@@ -117,7 +229,7 @@ export const artStyles = [
   {
     id: 'klimt',
     category: 'masters',
-    model: 'SDXL',
+    model: 'FLUX',
     isMaster: true,
     order: 37,
     name: '구스타프 클림트',
@@ -146,7 +258,7 @@ export const artStyles = [
   {
     id: 'munch-master',
     category: 'masters',
-    model: 'SDXL',
+    model: 'FLUX',
     isMaster: true,
     order: 38,
     name: '에드바르 뭉크',
@@ -175,7 +287,7 @@ export const artStyles = [
   {
     id: 'matisse-master',
     category: 'masters',
-    model: 'SDXL',
+    model: 'FLUX',
     isMaster: true,
     order: 39,
     name: '앙리 마티스',
@@ -204,7 +316,7 @@ export const artStyles = [
   {
     id: 'picasso',
     category: 'masters',
-    model: 'SDXL',
+    model: 'FLUX',
     isMaster: true,
     order: 40,
     name: '파블로 피카소',
@@ -233,7 +345,7 @@ export const artStyles = [
   {
     id: 'dali',
     category: 'masters',
-    model: 'SDXL',
+    model: 'FLUX',
     isMaster: true,
     order: 41,
     name: '살바도르 달리',
@@ -266,7 +378,7 @@ export const artStyles = [
   {
     id: 'korean',
     category: 'oriental',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 39,
     name: '한국',
     nameEn: 'Korean Art',
@@ -295,7 +407,7 @@ export const artStyles = [
   {
     id: 'chinese',
     category: 'oriental',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 40,
     name: '중국',
     nameEn: 'Chinese Art',
@@ -323,7 +435,7 @@ export const artStyles = [
   {
     id: 'japanese',
     category: 'oriental',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 41,
     name: '일본',
     nameEn: 'Japanese Art',
@@ -353,7 +465,7 @@ export const artStyles = [
   {
     id: 'korean-minhwa',
     category: 'oriental-detail',  // 숨김 카테고리
-    model: 'SDXL',
+    model: 'FLUX',
     order: 100,
     name: '한국 민화',
     nameEn: 'Korean Minhwa',
@@ -380,7 +492,7 @@ export const artStyles = [
   {
     id: 'korean-sumukhwa',
     category: 'oriental-detail',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 101,
     name: '한국 수묵화',
     nameEn: 'Korean Ink Painting',
@@ -407,7 +519,7 @@ export const artStyles = [
   {
     id: 'korean-dancheong',
     category: 'oriental-detail',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 102,
     name: '한국 단청',
     nameEn: 'Korean Dancheong',
@@ -434,7 +546,7 @@ export const artStyles = [
   {
     id: 'chinese-ink',
     category: 'oriental-detail',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 103,
     name: '중국 수묵화',
     nameEn: 'Chinese Ink Painting',
@@ -461,7 +573,7 @@ export const artStyles = [
   {
     id: 'chinese-gongbi',
     category: 'oriental-detail',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 104,
     name: '중국 공필화',
     nameEn: 'Chinese Gongbi',
@@ -488,7 +600,7 @@ export const artStyles = [
   {
     id: 'chinese-landscape',
     category: 'oriental-detail',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 105,
     name: '중국 산수화',
     nameEn: 'Chinese Landscape',
@@ -515,7 +627,7 @@ export const artStyles = [
   {
     id: 'japanese-ukiyoe',
     category: 'oriental-detail',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 106,
     name: '일본 우키요에',
     nameEn: 'Japanese Ukiyo-e',
@@ -542,7 +654,7 @@ export const artStyles = [
   {
     id: 'japanese-sumi-e',
     category: 'oriental-detail',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 107,
     name: '일본 수묵화',
     nameEn: 'Japanese Sumi-e',
@@ -569,7 +681,7 @@ export const artStyles = [
   {
     id: 'japanese-rinpa',
     category: 'oriental-detail',
-    model: 'SDXL',
+    model: 'FLUX',
     order: 108,
     name: '일본 린파',
     nameEn: 'Japanese Rinpa',

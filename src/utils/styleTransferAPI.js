@@ -1,4 +1,4 @@
-// PicoArt v22 - Style Transfer API (하이브리드 모델: FLUX + SDXL)
+// PicoArt v22 - Style Transfer API (하이브리드 모델: FLUX + FLUX)
 import { MODEL_CONFIG } from './modelConfig';
 
 // File to Base64 conversion
@@ -45,7 +45,7 @@ const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Get model configuration based on style
 const getModelForStyle = (style) => {
-  const model = style.model || 'SDXL'; // Default to SDXL
+  const model = style.model || 'FLUX'; // Default to FLUX
   return MODEL_CONFIG[model];
 };
 
@@ -75,12 +75,12 @@ const callFluxAPI = async (photoBase64, stylePrompt, onProgress) => {
   return response.json();
 };
 
-// SDXL API call
-const callSDXLAPI = async (photoBase64, selectedStyle, onProgress) => {
+// FLUX API call
+const callFLUXAPI = async (photoBase64, selectedStyle, onProgress) => {
   if (onProgress) onProgress('AI 자동 화가 선택 시작...');
 
   // 디버깅: 전송할 데이터 확인
-  console.log('=== Sending to /api/sdxl-transfer ===');
+  console.log('=== Sending to /api/flux-transfer-main ===');
   console.log('selectedStyle keys:', Object.keys(selectedStyle));
   console.log('selectedStyle.name:', selectedStyle.name);
   console.log('selectedStyle.category:', selectedStyle.category);
@@ -97,7 +97,7 @@ const callSDXLAPI = async (photoBase64, selectedStyle, onProgress) => {
   
   console.log('Payload selectedStyle:', payload.selectedStyle);
 
-  const response = await fetch('/api/sdxl-transfer', {
+  const response = await fetch('/api/flux-transfer-main', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -108,7 +108,7 @@ const callSDXLAPI = async (photoBase64, selectedStyle, onProgress) => {
   if (!response.ok) {
     const errorText = await response.text();
     console.error('API Error Response:', errorText);
-    throw new Error(`SDXL API error: ${response.status}`);
+    throw new Error(`FLUX API error: ${response.status}`);
   }
 
   return response.json();
@@ -168,7 +168,7 @@ export const processStyleTransfer = async (photoFile, selectedStyle, apiKey, onP
     if (modelConfig.model.includes('flux')) {
       prediction = await callFluxAPI(photoBase64, selectedStyle.prompt, onProgress);
     } else {
-      prediction = await callSDXLAPI(photoBase64, selectedStyle, onProgress);
+      prediction = await callFLUXAPI(photoBase64, selectedStyle, onProgress);
     }
 
     // 4. Poll for result

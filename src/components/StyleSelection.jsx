@@ -1,4 +1,4 @@
-// PicoArt v24 - StyleSelection (아이폰 스타일 - 데이터 있는 것만 표시)
+// PicoArt v24 - StyleSelection (아이폰 스타일 - 10개 모두 표시)
 import React, { useState, useMemo } from 'react';
 import { artStyles, styleCategories } from '../data/artStyles';
 
@@ -26,24 +26,15 @@ const StyleSelection = ({ photo, onSelect }) => {
   const groupedStyles = useMemo(() => {
     const groups = {};
     Object.entries(styleCategories).forEach(([key, category]) => {
-      const styles = artStyles.filter(style => style.category === key);
-      // 데이터가 있는 것만 포함
-      if (styles.length > 0) {
-        groups[key] = {
-          category,
-          styles
-        };
-      }
+      groups[key] = {
+        category,
+        styles: artStyles.filter(style => style.category === key)
+      };
     });
     return groups;
   }, []);
 
-  // 데이터가 있는 카테고리만 필터링
-  const availableSubcategories = useMemo(() => {
-    return mainCategories[mainCategory].subcategories.filter(
-      key => groupedStyles[key] && groupedStyles[key].styles.length > 0
-    );
-  }, [mainCategory, groupedStyles]);
+  const currentSubcategories = mainCategories[mainCategory].subcategories;
 
   const handleMainCategoryChange = (newMainCategory) => {
     setMainCategory(newMainCategory);
@@ -88,15 +79,15 @@ const StyleSelection = ({ photo, onSelect }) => {
 
         {/* 스타일 카드 */}
         <div className="styles-container">
-          {mainCategory === 'movements' && availableSubcategories.length > 0 && (
+          {mainCategory === 'movements' && (
             <div className="styles-grid">
-              {availableSubcategories.map(categoryKey => (
+              {currentSubcategories.map(categoryKey => (
                 <button
                   key={categoryKey}
                   className="style-card"
                   onClick={() => handleMovementCardClick(categoryKey)}
                 >
-                  <div className="card-icon">{styleCategories[categoryKey].icon || '🎨'}</div>
+                  <div className="card-icon">{groupedStyles[categoryKey]?.styles[0]?.icon || styleCategories[categoryKey].icon || '🎨'}</div>
                   <div className="card-name">{styleCategories[categoryKey].name}</div>
                   <div className="card-era">{styleCategories[categoryKey].era}</div>
                 </button>

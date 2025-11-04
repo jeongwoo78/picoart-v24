@@ -14,8 +14,8 @@
       "dest": "/api/check-prediction.js"
     },
     {
-      "src": "/api/sdxl-transfer",
-      "dest": "/api/sdxl-transfer.js"
+      "src": "/api/flux-transfer-main",
+      "dest": "/api/flux-transfer-main.js"
     },
     {
       "src": "/api/flux-transfer",
