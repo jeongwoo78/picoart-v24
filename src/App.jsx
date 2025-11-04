@@ -40,13 +40,13 @@ const App = () => {
 
   return (
     <div className="app">
-      {/* Header */}
-      {currentScreen !== 'processing' && currentScreen !== 'result' && (
+      {/* Header - upload 화면에서만 */}
+      {currentScreen === 'upload' && (
         <header className="app-header">
           <div className="header-content">
             <h1 className="app-title">🎨 PicoArt</h1>
             <p className="app-tagline">AI가 당신의 사진을 거장의 그림으로</p>
-            <p className="app-version">v23 - 3단계 카테고리 구조 / AI 자동 선택</p>
+            <p className="app-version">v24 - AI 자동 화가 선택 / 교육 시스템</p>
           </div>
         </header>
       )}
@@ -82,8 +82,8 @@ const App = () => {
         )}
       </main>
 
-      {/* Footer */}
-      {currentScreen !== 'processing' && currentScreen !== 'result' && (
+      {/* Footer - upload 화면에서만 */}
+      {currentScreen === 'upload' && (
         <footer className="app-footer">
           <div className="footer-content">
             <p className="footer-info">

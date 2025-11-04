@@ -1,10 +1,11 @@
-// PicoArt v24 - StyleSelection (개선: 사진 미리보기 + 통일된 인터페이스)
+// PicoArt v24 - StyleSelection (FIXED: 미술사조 선택 가능 + 사진 미리보기 + 통일 UI)
 import React, { useState, useMemo } from 'react';
 import { artStyles, styleCategories } from '../data/artStyles';
 
 const StyleSelection = ({ photo, onSelect }) => {
-  const [mainCategory, setMainCategory] = useState('movements'); // movements, masters, oriental
+  const [mainCategory, setMainCategory] = useState('movements');
   const [subCategory, setSubCategory] = useState('renaissance');
+  const [showMovementDetail, setShowMovementDetail] = useState(false);
 
   // 대 카테고리 정의
   const mainCategories = {
@@ -42,34 +43,35 @@ const StyleSelection = ({ photo, onSelect }) => {
     return groups;
   }, []);
 
-  // 현재 대 카테고리의 소 카테고리들
   const currentSubcategories = mainCategories[mainCategory].subcategories;
 
-  // 소 카테고리별 스타일 수 계산
   const getCategoryCount = (categoryKey) => {
     return groupedStyles[categoryKey]?.styles.length || 0;
   };
 
-  // 대 카테고리 변경 시 첫 번째 소 카테고리로 설정
   const handleMainCategoryChange = (newMainCategory) => {
     setMainCategory(newMainCategory);
     setSubCategory(mainCategories[newMainCategory].subcategories[0]);
+    setShowMovementDetail(false);
   };
 
-  // 소 카테고리 클릭 핸들러
+  // 소 카테고리 클릭: 선택만 하고 상세 화면 표시
   const handleSubCategoryClick = (categoryKey) => {
     setSubCategory(categoryKey);
-    
-    // 미술사조(movements)인 경우 바로 선택
+    setShowMovementDetail(true);
+  };
+
+  // 확정 버튼 클릭: 실제 선택 처리
+  const handleConfirmSelection = () => {
     if (mainCategory === 'movements') {
-      const categoryStyles = groupedStyles[categoryKey]?.styles || [];
+      const categoryStyles = groupedStyles[subCategory]?.styles || [];
       if (categoryStyles.length > 0) {
-        const categoryInfo = styleCategories[categoryKey];
+        const categoryInfo = styleCategories[subCategory];
         onSelect({
           ...categoryStyles[0],
           isMovementCategory: true,
           categoryName: categoryInfo.name,
-          categoryKey: categoryKey
+          categoryKey: subCategory
         });
       }
     }
@@ -78,10 +80,12 @@ const StyleSelection = ({ photo, onSelect }) => {
   return (
     <div className="style-selection">
       {/* 업로드한 사진 미리보기 */}
-      <div className="photo-preview">
-        <img src={photo} alt="Uploaded" />
-        <div className="photo-label">변환할 사진</div>
-      </div>
+      {photo && (
+        <div className="photo-preview">
+          <img src={photo} alt="Uploaded" />
+          <div className="photo-label">변환할 사진</div>
+        </div>
+      )}
 
       <div className="selection-container">
         <div className="selection-header">
@@ -125,7 +129,27 @@ const StyleSelection = ({ photo, onSelect }) => {
           </div>
         </div>
 
-        {/* 3단계: 개별 화가/스타일 선택 (거장과 동양화만 표시) */}
+        {/* 3단계: 상세 정보 및 선택 */}
+        {/* 미술사조: 확정 버튼 표시 */}
+        {mainCategory === 'movements' && showMovementDetail && (
+          <div className="styles-section">
+            <div className="section-header">
+              <h2>{styleCategories[subCategory].name}</h2>
+              <p className="section-era">{styleCategories[subCategory].era}</p>
+            </div>
+            
+            <div className="movement-confirm">
+              <p className="movement-desc">
+                이 시대의 대표 화가들 중에서 AI가 사진에 가장 적합한 화가를 선택합니다.
+              </p>
+              <button className="confirm-button" onClick={handleConfirmSelection}>
+                이 스타일로 변환하기
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* 거장/동양화: 개별 카드 표시 */}
         {mainCategory !== 'movements' && (
           <div className="styles-section">
             {groupedStyles[subCategory] && (
@@ -372,6 +396,37 @@ const StyleSelection = ({ photo, onSelect }) => {
           font-size: 1.1rem;
           opacity: 0.9;
           margin: 0;
+        }
+
+        /* 미술사조 확정 버튼 */
+        .movement-confirm {
+          text-align: center;
+          padding: 2rem;
+        }
+
+        .movement-desc {
+          color: white;
+          font-size: 1.1rem;
+          margin-bottom: 2rem;
+          line-height: 1.6;
+        }
+
+        .confirm-button {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          padding: 1.2rem 3rem;
+          border-radius: 12px;
+          font-size: 1.2rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .confirm-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
         .styles-grid {
