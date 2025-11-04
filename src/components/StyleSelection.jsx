@@ -1,8 +1,8 @@
-// PicoArt v23 - StyleSelection (3단계 구조: 대카테고리 → 소카테고리 → 화가)
+// PicoArt v24 - StyleSelection (개선: 사진 미리보기 + 통일된 인터페이스)
 import React, { useState, useMemo } from 'react';
 import { artStyles, styleCategories } from '../data/artStyles';
 
-const StyleSelection = ({ onSelect }) => {
+const StyleSelection = ({ photo, onSelect }) => {
   const [mainCategory, setMainCategory] = useState('movements'); // movements, masters, oriental
   const [subCategory, setSubCategory] = useState('renaissance');
 
@@ -56,7 +56,7 @@ const StyleSelection = ({ onSelect }) => {
     setSubCategory(mainCategories[newMainCategory].subcategories[0]);
   };
 
-  // 미술사조 탭 클릭 시 바로 선택 처리
+  // 소 카테고리 클릭 핸들러
   const handleSubCategoryClick = (categoryKey) => {
     setSubCategory(categoryKey);
     
@@ -64,13 +64,12 @@ const StyleSelection = ({ onSelect }) => {
     if (mainCategory === 'movements') {
       const categoryStyles = groupedStyles[categoryKey]?.styles || [];
       if (categoryStyles.length > 0) {
-        // 미술사조는 카테고리 정보만 전달 (백엔드에서 작가 목록 조회)
         const categoryInfo = styleCategories[categoryKey];
         onSelect({
-          ...categoryStyles[0], // 기본 구조 유지 (폴백용)
-          isMovementCategory: true, // 미술사조임을 표시
-          categoryName: categoryInfo.name, // "바로크"
-          categoryKey: categoryKey // "baroque"
+          ...categoryStyles[0],
+          isMovementCategory: true,
+          categoryName: categoryInfo.name,
+          categoryKey: categoryKey
         });
       }
     }
@@ -78,6 +77,12 @@ const StyleSelection = ({ onSelect }) => {
 
   return (
     <div className="style-selection">
+      {/* 업로드한 사진 미리보기 */}
+      <div className="photo-preview">
+        <img src={photo} alt="Uploaded" />
+        <div className="photo-label">변환할 사진</div>
+      </div>
+
       <div className="selection-container">
         <div className="selection-header">
           <h1>🎨 화풍 선택</h1>
@@ -139,41 +144,41 @@ const StyleSelection = ({ onSelect }) => {
                       className="style-card"
                       onClick={() => onSelect(style)}
                     >
-                    <div className="card-icon">{style.icon}</div>
-                    
-                    <div className="card-content">
-                      <div className="card-header">
-                        <h3>{style.name}</h3>
-                        <p className="card-english">{style.nameEn}</p>
+                      <div className="card-icon">{style.icon}</div>
+                      
+                      <div className="card-content">
+                        <div className="card-header">
+                          <h3>{style.name}</h3>
+                          <p className="card-english">{style.nameEn}</p>
+                        </div>
+
+                        {style.artist && (
+                          <div className="artist-info">
+                            <span className="artist-era">
+                              {style.artist.era}
+                            </span>
+                            {style.artist.essence && (
+                              <p className="artist-essence">
+                                {style.artist.essence}
+                              </p>
+                            )}
+                          </div>
+                        )}
+
+                        <p className="card-description">{style.description}</p>
+
+                        {style.model && (
+                          <div className="model-badge">
+                            {style.model === 'FLUX' ? '⚡ FLUX' : '🚀 SDXL'}
+                          </div>
+                        )}
                       </div>
-
-                      {style.artist && (
-                        <div className="artist-info">
-                          <span className="artist-era">
-                            {style.artist.era}
-                          </span>
-                          {style.artist.essence && (
-                            <p className="artist-essence">
-                              {style.artist.essence}
-                            </p>
-                          )}
-                        </div>
-                      )}
-
-                      <p className="card-description">{style.description}</p>
-
-                      {style.model && (
-                        <div className="model-badge">
-                          {style.model === 'FLUX' ? '⚡ FLUX' : '🚀 SDXL'}
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         )}
       </div>
 
@@ -182,6 +187,36 @@ const StyleSelection = ({ onSelect }) => {
           min-height: 100vh;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           padding: 2rem;
+          position: relative;
+        }
+
+        /* 사진 미리보기 */
+        .photo-preview {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          width: 150px;
+          z-index: 1000;
+          background: white;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-preview img {
+          width: 100%;
+          height: 150px;
+          object-fit: cover;
+          display: block;
+        }
+
+        .photo-label {
+          padding: 8px;
+          text-align: center;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #667eea;
+          background: white;
         }
 
         .selection-container {
@@ -263,16 +298,17 @@ const StyleSelection = ({ onSelect }) => {
         }
 
         .sub-category-tabs {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+          display: flex;
+          flex-wrap: wrap;
           gap: 0.75rem;
+          justify-content: center;
         }
 
         .sub-category-tab {
           background: rgba(255, 255, 255, 0.15);
           border: 2px solid rgba(255, 255, 255, 0.3);
           color: white;
-          padding: 1rem;
+          padding: 1rem 1.5rem;
           border-radius: 12px;
           cursor: pointer;
           transition: all 0.3s;
@@ -289,79 +325,77 @@ const StyleSelection = ({ onSelect }) => {
         }
 
         .sub-category-tab.active {
-          background: rgba(255, 255, 255, 0.3);
-          border-color: rgba(255, 255, 255, 0.7);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          background: rgba(255, 255, 255, 0.35);
+          border-color: rgba(255, 255, 255, 0.8);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .sub-category-tab .tab-name {
-          font-size: 1rem;
+          font-size: 1.1rem;
           font-weight: 600;
         }
 
         .sub-category-tab .tab-era {
-          font-size: 0.75rem;
+          font-size: 0.85rem;
           opacity: 0.85;
         }
 
         .sub-category-tab .tab-count {
           font-size: 0.8rem;
-          padding: 0.15rem 0.5rem;
+          opacity: 0.75;
           background: rgba(255, 255, 255, 0.2);
+          padding: 0.2rem 0.6rem;
           border-radius: 10px;
           margin-top: 0.25rem;
         }
 
-        /* 3단계: 화가 선택 */
+        /* 3단계: 스타일 그리드 */
         .styles-section {
-          background: white;
+          background: rgba(255, 255, 255, 0.15);
           border-radius: 20px;
           padding: 2rem;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(10px);
         }
 
         .section-header {
           text-align: center;
-          margin-bottom: 2rem;
-          padding-bottom: 1rem;
-          border-bottom: 2px solid #eee;
+          color: white;
+          margin-bottom: 1.5rem;
         }
 
         .section-header h2 {
-          font-size: 1.8rem;
-          color: #2d3748;
+          font-size: 2rem;
           margin: 0 0 0.5rem 0;
         }
 
         .section-era {
-          font-size: 1rem;
-          color: #718096;
+          font-size: 1.1rem;
+          opacity: 0.9;
           margin: 0;
         }
 
         .styles-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 1.5rem;
         }
 
         .style-card {
           background: white;
-          border: 2px solid #e2e8f0;
-          padding: 1.5rem;
+          border: none;
           border-radius: 16px;
+          padding: 1.5rem;
           cursor: pointer;
           transition: all 0.3s;
+          text-align: left;
           display: flex;
           flex-direction: column;
           gap: 1rem;
-          text-align: left;
         }
 
         .style-card:hover {
-          border-color: #667eea;
-          box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
           transform: translateY(-4px);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
         }
 
         .card-icon {
@@ -376,107 +410,89 @@ const StyleSelection = ({ onSelect }) => {
         }
 
         .card-header h3 {
-          font-size: 1.25rem;
-          color: #2d3748;
           margin: 0;
+          font-size: 1.5rem;
+          color: #2d3748;
         }
 
         .card-english {
-          font-size: 0.85rem;
-          color: #718096;
           margin: 0.25rem 0 0 0;
+          font-size: 0.9rem;
+          color: #718096;
         }
 
         .artist-info {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          padding: 0.75rem;
           background: #f7fafc;
+          padding: 0.75rem;
           border-radius: 8px;
         }
 
         .artist-era {
+          display: inline-block;
+          background: #667eea;
+          color: white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
           font-size: 0.85rem;
           font-weight: 600;
-          color: #667eea;
+          margin-bottom: 0.5rem;
         }
 
         .artist-essence {
-          font-size: 0.85rem;
-          color: #4a5568;
-          line-height: 1.4;
-          margin: 0;
-        }
-
-        .card-description {
+          margin: 0.5rem 0 0 0;
           font-size: 0.9rem;
           color: #4a5568;
           line-height: 1.5;
+        }
+
+        .card-description {
           margin: 0;
+          color: #4a5568;
+          line-height: 1.6;
+          font-size: 0.95rem;
         }
 
         .model-badge {
           display: inline-block;
-          padding: 0.4rem 0.8rem;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           color: white;
-          border-radius: 20px;
-          font-size: 0.75rem;
+          padding: 0.4rem 0.8rem;
+          border-radius: 8px;
+          font-size: 0.85rem;
           font-weight: 600;
           align-self: flex-start;
         }
 
-        /* 모바일 반응형 */
+        /* 반응형 */
         @media (max-width: 768px) {
           .style-selection {
             padding: 1rem;
+          }
+
+          .photo-preview {
+            width: 100px;
+            top: 10px;
+            right: 10px;
+          }
+
+          .photo-preview img {
+            height: 100px;
           }
 
           .selection-header h1 {
             font-size: 2rem;
           }
 
-          .header-subtitle {
-            font-size: 1rem;
-          }
-
           .main-category-tabs {
             grid-template-columns: 1fr;
-            gap: 0.75rem;
-          }
-
-          .main-category-tab {
-            padding: 1.25rem;
-          }
-
-          .main-category-tab .tab-icon {
-            font-size: 2rem;
-          }
-
-          .main-category-tab .tab-name {
-            font-size: 1.1rem;
           }
 
           .sub-category-tabs {
-            grid-template-columns: repeat(2, 1fr);
-          }
-
-          .styles-section {
-            padding: 1.5rem;
-          }
-
-          .section-header h2 {
-            font-size: 1.5rem;
+            flex-direction: column;
           }
 
           .styles-grid {
             grid-template-columns: 1fr;
-            gap: 1rem;
-          }
-
-          .style-card {
-            padding: 1.25rem;
           }
         }
       `}</style>

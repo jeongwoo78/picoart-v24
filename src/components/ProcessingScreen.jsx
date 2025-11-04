@@ -32,12 +32,8 @@ const ProcessingScreen = ({ photo, selectedStyle, onComplete }) => {
 
       // Stage 3: AI 변환 (교육 컨텐츠 계속 표시)
       setStage(3);
-      setStatusText('AI가 사진을 분석하고 있습니다...');
-      // 교육 컨텐츠는 계속 표시됨 (setShowEducation(false) 제거)
-      await sleep(500);
-      
-      setStatusText('AI가 최적의 화가를 선택하고 있습니다...');
-      await sleep(500);
+      setStatusText('스타일 변환 중...');
+      // 교육 컨텐츠는 계속 표시됨
 
       // Get API key
       const apiKey = import.meta.env.VITE_REPLICATE_API_KEY;

@@ -58,7 +58,10 @@ const App = () => {
         )}
 
         {currentScreen === 'style' && (
-          <StyleSelection onSelect={handleStyleSelect} />
+          <StyleSelection 
+            photo={uploadedPhoto}
+            onSelect={handleStyleSelect} 
+          />
         )}
 
         {currentScreen === 'processing' && (
