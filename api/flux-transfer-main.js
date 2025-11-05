@@ -464,7 +464,7 @@ export default async function handler(req, res) {
     const { image, selectedStyle } = req.body;
 
     // 디버깅 로그
-    console.log('=== SDXL Transfer Debug ===');
+    console.log('=== FLUX Transfer Debug ===');
     console.log('Has REPLICATE_API_KEY:', !!process.env.REPLICATE_API_KEY);
     console.log('Has ANTHROPIC_API_KEY:', !!process.env.ANTHROPIC_API_KEY);
     console.log('Has image:', !!image);

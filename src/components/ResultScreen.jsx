@@ -91,7 +91,7 @@ const ResultScreen = ({ originalPhoto, resultImage, selectedStyle, onReset }) =>
         {/* Before/After Slider */}
         <div className="comparison-wrapper">
           <BeforeAfter 
-            beforeImage={URL.createObjectURL(originalPhoto)}
+            beforeImage={originalPhoto}
             afterImage={resultImage}
           />
           <p className="comparison-hint">
